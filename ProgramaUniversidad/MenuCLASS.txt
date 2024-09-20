@@ -1,0 +1,83 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package paq;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Rosita
+ */
+public class Menu {
+    
+    private Connection conn;
+    private Carreras carreras;
+    //private Materias materias;
+
+    public Menu(Connection conn) {
+        this.conn = conn;
+        this.carreras = new Carreras(conn);
+        //this.materias = new Materias(conn);
+    }
+
+    public void mostrarMenu() {
+        Scanner scanner = new Scanner(System.in);
+        int opcion = 0;
+        while (opcion != 5) { // Suponiendo que 5 es la opción para salir
+            System.out.println("\nBienvenido al Menu de la UDLA \n(Universidad De Lo Absurdo):");
+            System.out.println("1. Mostrar Carreras Absurdas");
+            System.out.println("2. Agregar otra carrera Absurda");
+            System.out.println("3. Actualizar Carrera (hagamosla mas absurda aun)");
+            System.out.println("4. Eliminar Carrera (por no ser suficientemente absurda)");
+            System.out.println("5. Salir de esta fumada");
+
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Consumir el salto de línea
+
+                switch (opcion) {
+                    case 1:
+                        carreras.mostrarCarreras();
+                        break;
+                    case 2:
+                        System.out.println("Ingresa el nombre de la nueva carrera:");
+                        String nombre = scanner.nextLine();
+                        carreras.agregarCarrera(nombre);
+                        break;
+                    case 3:
+                        System.out.println("Ingresa el ID de la carrera a actualizar:");
+                        int id = scanner.nextInt();
+                        scanner.nextLine(); // Consumir el salto de línea
+                        System.out.println("Ingresa el nuevo nombre de la carrera:");
+                        String nuevoNombre = scanner.nextLine();
+                        carreras.actualizarCarrera(id, nuevoNombre);
+                        break;
+                    case 4:
+                        System.out.println("Ingresa el ID de la carrera a eliminar:");
+                        int idEliminar = scanner.nextInt();
+                        carreras.eliminarCarrera(idEliminar);
+                        break;
+                    case 5:
+                        System.out.println("Saliendo...");
+                        break;
+                    default:
+                        System.out.println("Opción no válida, por dios...");
+                        break;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Se ha producido un error en la base de datos. Te chinchas, hala...");
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada no válida. Intentalo de nuevo.");
+                scanner.next(); // Limpiar el buffer del scanner
+            }
+        }
+        scanner.close();
+    }
+}
