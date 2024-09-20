@@ -1,0 +1,37 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+package com.mycompany.programauniversidad;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author Rosita
+ */
+public class ProgramaUniversidad {
+
+    public static void main(String[] args) {
+        
+        try{
+            //CONEXION A BASE DE DATOS
+            Class.forName("com.mysql.cj.jdbc.Driver");//Llama a la clase Driver de la libreria
+            String URL="jdbc.mysql://localhost/UniversidadAbsurda"; //URL inicializada con la ruta de acceso
+            Connection conn=DriverManager.getConnection(URL,"root","root");//URL ya tiene el valor de la ruta
+            
+            //MENU
+            Menu menu01 = new Menu (conn);
+            menu01.mostrarMenu();
+            
+            //CIERRE DE CONEXION
+            conn.close();
+            System.out.println("A tomar viento la conexion");
+        }catch(SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+            System.out.println("jajajajaja te fastidias");
+        }
+    }
+}
